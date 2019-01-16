@@ -48,8 +48,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 			// 1. Get credentials from request
 			AppUser creds = new ObjectMapper().readValue(request.getInputStream(), AppUser.class);
 
-			// 2. Create auth object (contains credentials) which will be used by auth
-			// manager
+			// 2. Create auth object (contains credentials) which will be used by auth manager
 			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getUsername(),
 					creds.getPassword(), Collections.emptyList());
 
