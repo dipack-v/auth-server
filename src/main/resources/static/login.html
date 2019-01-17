@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Deepak">
+  <title>Login | </title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="js/jquery-3.3.1.min.js"></script>
+
+  <style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+  <!-- Custom styles for this template -->
+  <link href="css/floating-labels.css" rel="stylesheet">
+</head>
+
+<body>
+  <form class="form-signin" id="sign-in">
+
+    <div class="form-label-group">
+      <input name="username" type="text" id="inputEmail" class="form-control" placeholder="Email address" required=""
+        autofocus="">
+      <label for="inputEmail">Email address</label>
+    </div>
+
+    <div class="form-label-group">
+      <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+      <label for="inputPassword">Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted text-center">© 2017-2018</p>
+  </form>
+  <script>
+    $(function () {
+      var form = $("form#sign-in");
+      form.submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+          url: "auth",
+          type: "POST",
+          dataType: 'json',
+          contentType: "text/plain",
+          dataType:'text',
+          data: JSON.stringify({ username: $("#inputEmail").val(), password: $("#inputPassword").val() })
+        })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('fail was called'+errorThrown);
+        })
+          .done(function (data, textStatus, jqXHR) {
+            window.location.replace(getUrlParameter('redirect_url')+'?token='+jqXHR.getResponseHeader("authorization").replace('Bearer ',''));
+        })
+          .always(function (dataOrjqXHR, textStatus, jqXHRorErrorThrown) { console.log('always was called'); });
+      });
+    });
+
+
+    function getUrlParameter(name) {
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+
+  </script>
+
+</body>
+
+</html>
